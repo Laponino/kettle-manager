@@ -1,0 +1,3 @@
+RPi.GPIO==0.7.0
+git+https://github.com/Dublerq/rpi-lcd-menu#egg=RpiLCDMenu
+git+https://github.com/martinohanlon/KY040#egg=KY040
