@@ -14,13 +14,34 @@ class Display(object):
         self.menu = RpiLCDMenu(RS_PIN, E_PIN, DB_PINS)
         self.rotary_encoder = RotaryEncoder(self)
 
-        temp_submenu = RpiLCDSubMenu(self.menu)
-        temp_submenu.append_item(FunctionItem("Back", lambda: temp_submenu.exit()))
-        temp_submenu.append_item(MessageItem(self.getTemp(), "That's cool right?", temp_submenu))
+        # Calibrate Submenu
+        read_temp_submenu = RpiLCDSubMenu(self.menu)
+        read_temp_submenu.append_item(FunctionItem("Back", lambda: read_temp_submenu.exit()))
+        read_temp_submenu.append_item(MenuItem(self.getTemp()))
 
-        temp_item = SubmenuItem("Read temp", temp_submenu, self.menu)
-        other_item = FunctionItem("Other", lambda: print("other"))
-        self.menu.append_item(temp_item).append_item(other_item)
+        # Options Submenu
+        options_submenu = RpiLCDSubMenu(self.menu)
+        options_submenu.append_item(FunctionItem("Setup", lambda: print("setup")))
+        options_submenu.append_item(SubmenuItem("Read temp", read_temp_submenu, options_submenu))
+        options_submenu.append_item(FunctionItem("Back", lambda: options_submenu.exit()))
+
+        # Select-temperature Submenu
+        boil_temp_submenu = RpiLCDSubMenu(self.menu)
+        for t in [60, 65, 70, 75, 80, 85, 90, 95, 100]:
+            boil_temp_submenu.append_item(MessageItem(f"{t} C", "Boiling to {t} C...", self.menu))
+        boil_temp_submenu.append_item(FunctionItem("Back", lambda: boil_temp_submenu.exit()))
+
+        # Select-volume Submenu
+        boil_vol_submenu = RpiLCDSubMenu(self.menu)
+        for v in [0.50, 0.75, 1.00, 1.25, 1.50, 1.75]:
+            boil_vol_submenu.append_item(SubmenuItem(f"{v:.2f} L", boil_temp_submenu, boil_vol_submenu))
+        boil_vol_submenu.append_item(FunctionItem("Back", lambda: boil_vol_submenu.exit()))
+
+        # Main Menu
+        boil_item = SubmenuItem("Boil", boil_vol_submenu, self.menu)
+        temp_item = FunctionItem("Calibrate", lambda: print("calibrate"))
+        other_item = SubmenuItem("Options", options_submenu, self.menu)
+        self.menu.append_item(boil_item).append_item(temp_item).append_item(other_item)
 
         self.menu.start()
 
