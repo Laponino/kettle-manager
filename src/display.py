@@ -60,7 +60,19 @@ class Display(object):
 
     def onTempSelected(self, t):
         print(f"Boiling to {t} C...")
+        self.menu.clearDisplay()
+        self.menu.message(f"Boiling to {t} C...")
         self.power.on()
+        go_on = True
+        while go_on:
+            temp = round(self.temperature_sensor.read(), 1)
+            print(f"Temp: {temp} C")
+            if temp > int(t):
+                go_on = False
+            time.sleep(1)
+        self.power.off()
+        self.menu.clearDisplay()
+        self.menu.message(f"Done! {temp} C")
 
     def onRotaryNext(self):
         self.menu.processDown()
