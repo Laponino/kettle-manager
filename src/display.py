@@ -50,7 +50,7 @@ class Display(object):
 
         # Main Menu
         boil_item = SubmenuItem("Boil", boil_vol_submenu, self.menu)
-        temp_item = FunctionItem("Calibrate", lambda: print("calibrate"))
+        temp_item = FunctionItem("Calibrate", self.calibrate)
         other_item = SubmenuItem("Options", options_submenu, self.menu)
         self.menu.append_item(boil_item) \
                  .append_item(temp_item) \
@@ -67,6 +67,24 @@ class Display(object):
         while go_on:
             temp = round(self.temperature_sensor.read(), 1)
             print(f"Temp: {temp} C")
+            if temp > int(t):
+                go_on = False
+            time.sleep(1)
+        self.power.off()
+        self.menu.clearDisplay()
+        self.menu.message(f"Done! {temp} C")
+
+    def calibrate(self):
+        print(f"Calibrating...")
+        self.menu.clearDisplay()
+        self.menu.message(f"Boiling to 100 C...")
+        self.power.on()
+        go_on = True
+        t = 99
+        st = time.time()
+        while go_on:
+            temp = round(self.temperature_sensor.read(), 1)
+            print(f"{time.time() - st}, {temp}")
             if temp > int(t):
                 go_on = False
             time.sleep(1)
