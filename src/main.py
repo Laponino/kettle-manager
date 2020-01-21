@@ -1,10 +1,12 @@
 import time
+import RPi.GPIO as GPIO
 
 from display import Display
 from temperaturesensor import TemperatureSensor
 
 
 if __name__ == "__main__":
+    GPIO.setmode(GPIO.BCM)
     temperature_sensor = TemperatureSensor()
     display = Display(temperature_sensor)
     
