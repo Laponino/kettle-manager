@@ -12,10 +12,14 @@ class ServerModel:
         self.train_data_path = os.path.join("temp", "out.csv")       
 
     def fetch_model(self):
+        print("Fetching model for device_id...")
         params = { "device_id": self.device_id }
-        resp = requests.get("http://40.76.200.165/model", params=params)
-        with open("temp/model.tfl", "wb") as f:
-            f.write(resp.content)
+        try:
+            resp = requests.get("http://40.76.200.165/model", params=params, timeout=5)
+            with open("temp/model.tfl", "wb") as f:
+                f.write(resp.content)
+        except:
+            print("Failed to reach server, using local model")
 
         self.interpreter = tflite.Interpreter(model_path="temp/model.tfl")
         self.interpreter.allocate_tensors()
