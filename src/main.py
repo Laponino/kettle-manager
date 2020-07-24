@@ -2,7 +2,7 @@ import time
 import RPi.GPIO as GPIO
 
 from display import Display
-from temperaturesensor import TemperatureSensor
+from temperature import TemperatureSensor
 
 
 if __name__ == "__main__":
