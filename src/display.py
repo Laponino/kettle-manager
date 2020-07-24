@@ -2,9 +2,9 @@ import time
 
 from rpilcdmenu import RpiLCDMenu, RpiLCDSubMenu
 from rpilcdmenu.items import FunctionItem, SubmenuItem, MessageItem, MenuItem
-from rotaryencoder import RotaryEncoder
-from power import Power
-from servermodel import ServerModel
+from button import RotaryEncoder
+from switch import Power
+from model import ServerModel
 
 RS_PIN = 27
 E_PIN = 22
