@@ -8,9 +8,6 @@ from button import RotaryEncoder
 from switch import Power
 from model import ServerModel
 
-RS_PIN = 27
-E_PIN = 22
-DB_PINS = [25, 24, 23, 18]
 POWER_PIN = 21
 
 class Display(object):
@@ -23,7 +20,7 @@ class Display(object):
         self.boil_temps = [60, 65, 70, 75, 80, 85, 90, 95, 100]
         self.boil_volumes = [0.50, 0.75, 1.00, 1.25, 1.50, 1.75]
 
-        self.menu = RpiLCDMenu(RS_PIN, E_PIN, DB_PINS)
+        self.menu = RpiLCDMenu()
         self.init_menu()
 
     def init_menu(self):
